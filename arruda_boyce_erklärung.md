@@ -62,7 +62,7 @@ Dieses Modell ist ideal für Elastomere (Gummi), da es die charakteristische S-f
 
 Die inverse Langevin-Funktion, die exakt das Verhalten von Polymerketten beschreibt, ist analytisch schwer zu handhaben. Daher nutzen wir eine Taylor-Entwicklung für $W_{dev}$ um den isotropen Referenzzustand [--> Skript, Gl. 2.242; vgl. Holzapfel, Gl. 6.136]:
 
-$$W_{dev} = \mu \left[ \frac{1}{2}(\bar{I}_1 - 3) + \frac{1}{20\beta^2}(\bar{I}_1^2 - 9) + \frac{11}{1050\beta^4}(\bar{I}_1^3 - 27) + \dots \right]$$
+$$W_{dev} = \mu \left[ \frac{1}{2}(\bar{I}_1 - 3) + \frac{1}{20\beta^2}(\bar{I}_1^2 - 9) + \frac{11}{1050\beta^4}(\bar{I}_1^3 - 27) + \frac{19}{7000\beta^4}(\bar{I}_1^4 - 81) + \frac{519}{673750\beta^8}(\bar{I}_1^5 - 243) +\ \dots \right]$$
 
 **Physikalische Interpretation:**
 - Der erste Term (linear in $\bar{I}_1 - 3$) repräsentiert das Neo-Hooksche Verhalten bei kleinen Dehnungen

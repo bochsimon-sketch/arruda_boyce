@@ -45,23 +45,25 @@ arruda_boyce/
 ├── arruda_boyce_erklärung.md             # Complete theoretical documentation (German)
 ├── Herleitung_Tangensteifigkeit[...].md  # Detailed derivations (German)
 │
-├── 02_Code/                           # (gitignored) 
-│   ├── 01_Main.sci                    # Primary workflow orchestrator, Plotting
-│   ├── 02_Material_Model.sci          # Core material routine (F → σ)
-│   ├── 04_Curve_Fit.sci               # Parameter optimization (lsqrsolve)
-│   ├── 05_Tangentialsteifigkeit.sci   # Tangent stiffness (E_T) & glyphs
+├── 00_General                      # Aufgabenstellung, Organisation in der Gruppe (gitignored)
+│
+├── 01_Doku/                        # Dokumentation, Bericht (gitignored)
+│    └── Bilder/...
+│
+├── 02_Code/                        # (gitignored) 
+│   ├── Main.sci                    # Primary workflow orchestrator, Plotting
+│   ├── Material_Model.sci          # Core material routine (F → σ)
+│   ├── Curve_Fit.sci               # Parameter optimization (lsqrsolve)
+│   ├── Tangentialsteifigkeit.sci   # Tangent stiffness (E_T) & glyphs
+│   ├── [...]_Test.txt              # Extracted Experimental stress-strain data from Hyperelastic.txt
+│   └── ...
 │
 ├── 03_References/                     # (gitignored)
 │   ├── 01_Unterlagen von Prof/        # Lecture notes & reference implementations
 │   │   ├── ET-NeoHook.sci             # 3D glyph example
 │   │   └── ...
 │   └── Hyperelastic.txt               # Experimental stress-strain data
-│
-└── plots/                             # Generated figures (gitignored)
-    ├── Initial_Guess.png
-    ├── Fitted_Curves.png
-    ├── Glyph_Comparison.png
-    └── ...
+└── ...
 ```
 
 ---

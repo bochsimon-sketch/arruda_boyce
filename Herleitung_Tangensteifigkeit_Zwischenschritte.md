@@ -129,10 +129,10 @@ $$
 $$
 
 **Schritt 1.3: Volumetrischen Teil zusammensetzen**
-Wir setzen beides in unsere Produktregel ein und multiplizieren mit 2 für den Steifigkeitstensor $\mathbb{C}_{T, vol} = 2 \frac{\partial \boldsymbol{P}_{vol}}{\partial \boldsymbol{C}}$:
+Wir setzen beides in unsere Produktregel ein und multiplizieren mit 2 für den Steifigkeitstensor $C_{T, vol} = 2 \frac{\partial P_{vol}}{\partial C}$:
 
 $$
-\mathbb{C}_{T, vol} = 2 \left[ K \left( J - \frac{1}{2} \right) J \boldsymbol{C}^{-1} \otimes \boldsymbol{C}^{-1} - (p_J J) \mathbb{I}_{C^{-1}} \right]
+\mathbb{C}_{T, vol} = 2 \left[ K \left( J - \frac{1}{2} \right) J C^{-1} \otimes C^{-1} - (p_J J) \mathbb{I}_{C^{-1}} \right]
 $$
 
 ---

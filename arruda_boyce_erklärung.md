@@ -120,7 +120,7 @@ Diese Darstellung ist numerisch stabil und trennt die deviatorischen und volumet
 
 Die wahre Spannung $\boldsymbol{\Sigma}$ (Cauchy-Spannung) erhalten wir durch den **"Push-forward"** der 1. PK-Spannung von der Referenzkonfiguration in die aktuelle Konfiguration:
 
-$$\boldsymbol{\Sigma} = \frac{1}{J} \boldsymbol{\Pi} \boldsymbol{F}^T$$
+$$\boldsymbol{\Sigma} = \frac{1}{J} \boldsymbol{F} \boldsymbol{\Pi}$$
 
 Der Faktor $1/J$ berücksichtigt dabei, dass die Spannung nun auf die aktuelle (verformte) Fläche bezogen wird, nicht mehr auf die ursprüngliche Fläche.
 

@@ -152,7 +152,7 @@ In dieser Aufgabe erzeugen wir die theoretischen Kurven, die später mit den Mes
 Die Simulation eines Lastfalls (z.B. `simulate_uniaxial_tension`) folgt immer diesem Schema:
 
 1. **Input:** 
-   - Ein Vektor von Streckungen `lambda_range` (z.B. von 1.0 bis 7.0)
+   - Ein Vektor von Streckungen `lambda_range` (z.B. von 1.0 bis 5.0)
    - Initiale Materialparameter ($\mu, \beta, K$)
 
 2. **Schleife:** Für jeden Wert $\lambda_i$:
@@ -175,7 +175,7 @@ Unsere Materialroutine berechnet jedoch die **wahre Spannung** (Cauchy-Spannung)
 
 $$\sigma = \frac{\text{Aktuelle Kraft}}{\text{Aktueller Querschnitt } A(t)}$$
 
-**Das Problem:** Bei Gummi ändern sich die Querschnitte extrem stark durch Querkontraktion. Eine Zugprobe mit Ausgangsquerschnitt $A_0$ wird beim Dehnen um $\lambda = 7$ in der Querrichtung um den Faktor $\approx 1/\sqrt{\lambda} \approx 0.378$ gestaucht. Der aktuelle Querschnitt ist also deutlich kleiner, und die Cauchy-Spannung kann um ein Mehrfaches höher liegen als die Nennspannung.
+**Das Problem:** Bei Gummi ändern sich die Querschnitte extrem stark durch Querkontraktion. Eine Zugprobe mit Ausgangsquerschnitt $A_0$ wird beim Dehnen um $\lambda = 5$ in der Querrichtung um den Faktor $1/\sqrt{\lambda} \approx 0.447$ gestaucht. Der aktuelle Querschnitt ist also deutlich kleiner, und die Cauchy-Spannung kann um ein Mehrfaches höher liegen als die Nennspannung.
 
 **Die Lösung:** Wir transformieren die Cauchy-Spannung über die **1. Piola-Kirchhoff Spannung** (Nennspannung) zurück [--> Holzapfel, Gl. 3.8 für die Piola-Transformation]:
 
@@ -311,7 +311,7 @@ In Scilab nutzen wir den **Levenberg-Marquardt-Algorithmus** über den Befehl `l
 **Rückgabewerte:**
 
 - **`optimized_params`:** 
-  Der optimierte Parametervektor $[\mu^*, \beta^*, K^*]$
+  Der optimierte Parametervektor $[\mu^{\*}, \beta^{\*}, K^{\*}]$
 - **`v`:** 
   Residuen-Vektor (sollte gegen Null konvergieren)
 - **`info`:** 
@@ -418,7 +418,7 @@ Im Code wird dies über zwei Terme realisiert:
 - **`term_K2`**: $2 p_J J \mathbb{I}_{C^{-1}}$ 
   (Geometrischer Anteil der inversen Metrik)
 
-Dabei ist $\boldsymbol{I}_{C^{-1}}$ der **symmetrische Identitätstensor der inversen Metrik** (`fourth_order_inv_symm`), dessen Ableitung $\frac{\partial \boldsymbol{C}^{-1}}{\partial \boldsymbol{C}} = -\mathbb{I}_{C^{-1}}$ folgt [--> Holzapfel, Gl. 6.164]:
+Dabei ist **$\boldsymbol{I}_{C^{-1}}$** der **symmetrische Identitätstensor der inversen Metrik** (`fourth_order_inv_symm`), dessen Ableitung $\frac{\partial \boldsymbol{C}^{-1}}{\partial \boldsymbol{C}} = -\mathbb{I}_{C^{-1}}$ folgt [--> Holzapfel, Gl. 6.164]:
 
 $$\mathbb{I}_{ijkl} = \frac{1}{2} \left( \boldsymbol{C}^{-1}_{ik} \boldsymbol{C}^{-1}_{jl} + \boldsymbol{C}^{-1}_{il} \boldsymbol{C}^{-1}_{jk} \right)$$
 
@@ -570,10 +570,12 @@ Ein kritischer Punkt bei Hyperelastizität ist der Bezug der Kraft:
 
 - **Nennspannung (PK1):** 
   Bezieht die Kraft auf den **ursprünglichen Querschnitt** ($A_0$)
+  
   $$P = \frac{F}{A_0}$$
 
 - **Wahre Spannung (Cauchy):** 
   Bezieht die Kraft auf den **aktuellen, eingeschnürten Querschnitt** ($A_{\text{aktuell}}$)
+  
   $$\sigma = \frac{F}{A_{\text{aktuell}}} = \frac{F}{A_0 / \lambda_{\text{quer}}} = J \cdot P / \lambda$$
 
 Der fundamentale Zusammenhang zwischen der wahren Hauptspannung (Cauchy) und der 1. PK-Hauptspannung folgt dabei [--> Holzapfel, Gl. 6.48]:

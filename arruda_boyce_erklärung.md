@@ -95,6 +95,42 @@ Eingesetzt ergibt sich exakt der im Code (`calculate_PK1_stress`) implementierte
 
 $$\boldsymbol{\Pi} = \underbrace{2 W_1 J^{-2/3} \left( \boldsymbol{F} - \frac{1}{3} I_1 \boldsymbol{F}^{-T} \right)}_{\boldsymbol{\Pi}_{dev}} + \underbrace{K(J-1) J \boldsymbol{F}^{-T}}_{\boldsymbol{\Pi}_{vol}}$$
 
+```scilab
+// Berechnung des deviatorischen Anteils der 1. Piola-Kirchhoff Spannung (PK1).
+// Resultiert aus der Formänderung des molekularen Netzwerks unter konstantem Volumen.
+function PK1_dev = calculate_PK1_dev_from_F(F, invariants, my, Beta)
+    I1 = invariants(1); I1_dev = invariants(2); J = invariants(3);
+    
+    // Taylor-Approximation der Netzwerkversteifung (dW/dI1_dev)
+    a = calculate_taylor_expansion_coefficients(Beta);
+    d_hyperel_potential_dev = my*(a(1) + a(2)*2.0*I1_dev^1 + a(3)*3.0*I1_dev^2 ..
+                                       + a(4)*4.0*I1_dev^3 + a(5)*5.0*I1_dev^4);
+    
+    // Ableitung der modifizierten Invariante nach F (Kettenregel nach Holzapfel)
+    d_invariant_1_dev = 2.0*J^(-2/3)*(F-(1/3)*I1*inv(F)'); 
+
+    // PK1_dev = dW_bar/dI1_dev * dI1_dev/dF
+    PK1_dev = d_hyperel_potential_dev * d_invariant_1_dev;
+endfunction
+
+// Berechnung des volumetrischen Anteils der PK1-Spannung.
+// Modelliert die hydrostatische Reaktion basierend auf dem Kompressionsmodul K.
+function PK1_vol = calculate_PK1_vol_from_F(F, J, K)
+    // PK1_vol = dW_vol/dJ * dJ/dF = K*(J-1) * J*F^-T
+    PK1_vol = K*(J-1.0) * J*inv(F)';
+endfunction
+
+// Aggregation der Spannungsbeiträge zur 1. Piola-Kirchhoff Spannung (Nennspannung).
+function PK1 = calculate_PK1_stress(F, mat_params)
+    my = mat_params(1); Beta = mat_params(2); K = mat_params(3);
+    invariants = calculate_invariants_of_F(F);
+    
+    PK1_dev = calculate_PK1_dev_from_F(F, invariants, my, Beta);
+    PK1_vol = calculate_PK1_vol_from_F(F, invariants(3), K);
+    PK1     = PK1_dev + PK1_vol;
+endfunction
+```
+
 ### 1.4 Push-Forward zur Cauchy-Spannung ($\boldsymbol{\Sigma}$)
 Die wahre Spannung (Cauchy-Spannung) erhalten wir durch den **"Push-Forward"** der 1. PK-Spannung von der Referenzkonfiguration in die aktuelle Konfiguration. Im Skript ist dies über die inverse Piola-Transformation definiert [--> Skript, Gl. 1.149]:
 

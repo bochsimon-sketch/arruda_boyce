@@ -6,35 +6,35 @@ Dieses Dokument erläutert die theoretischen Grundlagen der Scilab-Implementieru
 --------------------------------------------------------------------------------
 
 ## Inhaltsverzeichnis
-1. [Aufgabe 1: Die Materialroutine (`calculate_Cauchy_stress`)](#1-aufgabe-1-die-materialroutine-f_to_sig)
+1. [Aufgabe 1: Die Materialroutine (`calculate_Cauchy_stress`)](#1-aufgabe-1-die-materialroutine-calculate_Cauchy_stress)
     *  1.1 Der isochore Anteil (Taylor-Reihe)
     *  1.2 Der volumetrische Anteil
     *  1.3 Die 1. Piola-Kirchhoff-Spannung ($\boldsymbol{\Pi}$)
     *  1.4 Push-Forward zur Cauchy-Spannung ($\boldsymbol{\sigma}$)
-2. Aufgabe 2: Lastfall-Simulation & Querdehnung
+3. Aufgabe 2: Lastfall-Simulation & Querdehnung
     *  2.1 Iterative Bestimmung der transversalen Streckung
     *  2.2 Der kompressible Deformationsgradient
     *  2.3 Transformation in messbare Nennspannungen
     *  2.4 Übersicht der Lastfälle
-3. Aufgabe 3: Visualisierung in Scilab
+4. Aufgabe 3: Visualisierung in Scilab
     *  3.1 Fenstersteuerung und Grafik-Engine
     *  3.2 Strukturierte Darstellung via Subplots
     *  3.3 Formatierung und LaTeX-Unterstützung
-4. Aufgabe 4: Parameteridentifikation (`lsqrsolve`)
+5. Aufgabe 4: Parameteridentifikation (`lsqrsolve`)
     *  4.1 Der Levenberg-Marquardt-Algorithmus
     *  4.2 Definition der Residuenfunktion
     *  4.3 Multimodales (kombiniertes) Fitting
-5. Aufgabe 5: Tangentialsteifigkeit ($\mathbb{C}_T$) & Voigt-Notation
+6. Aufgabe 5: Tangentialsteifigkeit ($\mathbb{C}_T$) & Voigt-Notation
     *  5.1 Der materielle Steifigkeitstensor
     *  5.2 Effizienzsteigerung durch 6x6-Reduktion
-6. Aufgabe 6: Glyphen-Visualisierung ($E_{nnnn}$)
+7. Aufgabe 6: Glyphen-Visualisierung ($E_{nnnn}$)
     *  6.1 Vektorisierte Richtungsmodul-Berechnung
     *  6.2 Interpretation der richtungsabhängigen Steifigkeit
     *  6.3 Skalierung und Farbraumsteuerung
-7. Aufgabe 7: Transformation der Steifigkeitstensorik
+8. Aufgabe 7: Transformation der Steifigkeitstensorik
     *  7.1 Push-Forward via Voigt-Transformationsmatrix ($\mathbf{Q}$)
     *  7.2 Räumliche vs. Materielle Formulierung
-8. Nomenklatur & Abkürzungen
+9. Nomenklatur & Abkürzungen
 
 --------------------------------------------------------------------------------
 

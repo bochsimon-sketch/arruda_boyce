@@ -197,7 +197,7 @@ $$\text{Nennspannung} = \frac{\text{Aktuelle Kraft}}{\text{Ursprünglicher Quers
 **Das Problem:** Unsere Materialroutine berechnet basierend auf der Deformation die **wahre Spannung** (Cauchy-Spannung $\boldsymbol{\Sigma}$). Bei hochelastischen Materialien wie Gummi ändert sich der Querschnitt durch die Querkontraktion beim Ziehen extrem. Eine Zugprobe wird in Querrichtung massiv gestaucht, wodurch der aktuelle Querschnitt deutlich kleiner ist und die Cauchy-Spannung um ein Mehrfaches über der experimentellen Nennspannung liegt.
 
 **Die Lösung:** Wir transformieren die berechnete Cauchy-Spannung über die **Piola-Transformation** in die 1. Piola-Kirchhoff-Spannung (Nennspannung) zurück [--> Skript, Gl. 1.148; vgl. Holzapfel, Gl. 3.8]:
-$$\boldsymbol{\Pi} = J \boldsymbol{\Sigma} \boldsymbol{F}^{-T}$$
+$$\boldsymbol{\Pi} = J \boldsymbol{F}^{-1} \cdot \boldsymbol{\Sigma} $$
 Nur die Hauptkomponente $\Pi_{11}$ dieses Tensors entspricht der im Labor gemessenen Kraft pro Ausgangsfläche und ist damit direkt mit den experimentellen Daten abgleichbar.
 
 *Tipp für die Startwerte (Initial Guess):* Um die unkalibrierten Modellantworten erstmals plotten zu können, wird im Code ein Startwert für $\mu$ benötigt. Dieser lässt sich grob aus der Anfangssteigung $E_0$ des uniaxialen Zugversuchs schätzen. Im elastischen Limit geht das Modell in ein Neo-Hookesches Material über, für das $\Sigma \approx 3\mu \cdot (\lambda - 1/\lambda^2)$ und somit $E_0 \approx 3\mu$ gilt [--> vgl. Holzapfel, S. 238].

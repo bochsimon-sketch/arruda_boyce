@@ -135,7 +135,7 @@ Setzt man die Herleitung für das Arruda-Boyce-Modell konsequent fort (mit dem l
 
 $$\boldsymbol{\Sigma} = \frac{2}{J^{5/3}} W_1 \bar{\boldsymbol{B}} + p_J \boldsymbol{I}$$
 
-Die Routine `calculate_Cauchy_stress` führt exakt diese Piola-Rücktransformation algorithmisch durch.
+Die Routine `calculate_Cauchy_stress` führt exakt diese transformation durch.
 
 ```scilab
 // Code-Ausschnitt: Push-Forward zur wahren Spannung

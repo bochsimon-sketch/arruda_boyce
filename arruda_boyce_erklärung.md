@@ -262,12 +262,12 @@ $$\boldsymbol{P} = \underbrace{\frac{2 W_1}{J^{2/3}} \left( \boldsymbol{I} - \fr
 ### 5.2 Der materielle Steifigkeitstensor ($\mathbb{C}_T$)
 Der Steifigkeitstensor 4. Stufe folgt aus der erneuten Ableitung der Spannung nach $\boldsymbol{C}$ [--> Skript, Gl. 2.198; vgl. Holzapfel, Gl. 6.157]:
 
-$$\mathbb{C}_T = 2 \frac{\partial \boldsymbol{P}}{\partial \boldsymbol{C}} = 4 \frac{\partial^2 W}{\partial \boldsymbol{C} \partial \boldsymbol{C}}$$
+$$\mathbb{C}_T = 2 \frac{\partial P}{\partial C} = 4 \frac{\partial^2 W}{\partial C \partial C}$$
 
 **A) Volumetrischer Teil:**
-Aus der Ableitung von $\boldsymbol{P}_{vol} = K(J-1) J \boldsymbol{C}^{-1}$ folgt mittels Produkt- und Kettenregel der volumetrische Steifigkeitstensor [--> vgl. Holzapfel, Gl. 6.166]:
+Aus der Ableitung von $P_{vol} = K(J-1) J \boldsymbol{C}^{-1}$ folgt mittels Produkt- und Kettenregel der volumetrische Steifigkeitstensor [--> vgl. Holzapfel, Gl. 6.166]:
 
-$$\mathbb{C}_{T, vol} = 2 \left[ \frac{\partial (p_J J)}{\partial \boldsymbol{C}} \otimes \boldsymbol{C}^{-1} + (p_J J) \frac{\partial \boldsymbol{C}^{-1}}{\partial \boldsymbol{C}} \right]$$
+$$\mathbb{C}_{T, vol} = 2 \left[ \frac{\partial (p_J J)}{\partial C} \otimes C^{-1} + (p_J J) \frac{\partial C^{-1}}{\partial C} \right]$$
 
 Dabei ist die Ableitung der inversen Metrik negativ und führt auf den symmetrischen Identitätstensor 4. Stufe ($I_{C^{-1}}$) [--> vgl. Holzapfel, Gl. 6.164]: $\frac{\partial C^{-1}}{\partial C} = -I_{C^{-1}}$. Im Code (`Tangentialsteifigkeit.sci`) spiegelt sich dies in den Termen für $K$ wider, welche exakt diese geometrische Nichtlinearität der inversen Metrik abbilden.
 
@@ -276,7 +276,7 @@ Die analytische Ableitung des isochoren Anteils erfordert die Anwendung der Kett
 
 $$\mathbb{C}_{T, dev} = 4 W_{11} \left( \frac{\partial \bar{I}_1}{\partial C} \otimes \frac{\partial \bar{I}_1}{\partial C} \right) + 4 W_1 \left( \frac{\partial^2 \bar{I}_1}{\partial C^2} \right)$$
 
-Die korrekte algorithmische Implementierung der zweiten Ableitung $\frac{\partial^2 \bar{I}_1}{\partial C^2}$ ist kompliziert und besteht aus der Kopplung zwischen Volumen und Gestaltänderung, der Selbst-Wechselwirkung der inversen Metrik sowie dem symmetrischen Anteil $\mathbb{I}_{C^{-1}}$. Diese mathematisch exakte Zerlegung stellt sicher, dass die richtungsabhängige Steifigkeit bei finiten Dehnungen physikalisch konsistent bleibt.
+Die korrekte algorithmische Implementierung der zweiten Ableitung $\frac{\partial^2 I_1}{\partial C^2}$ ist kompliziert und besteht aus der Kopplung zwischen Volumen und Gestaltänderung, der Selbst-Wechselwirkung der inversen Metrik sowie dem symmetrischen Anteil $\mathbb{I}_{C^{-1}}$. Diese mathematisch exakte Zerlegung stellt sicher, dass die richtungsabhängige Steifigkeit bei finiten Dehnungen physikalisch konsistent bleibt.
 
 ### 5.3 Effizienzsteigerung durch 6x6-Voigt-Notation
 Ein Tensor 4. Stufe besitzt in 3D grundsätzlich $3^4 = 81$ Komponenten. Da sowohl der Spannungs- als auch der Verzerrungstensor symmetrisch sind, weist auch der Steifigkeitstensor $\mathbb{C}_T$ weitreichende Symmetrien auf (Minor- und Major-Symmetries).
@@ -297,7 +297,7 @@ function [Voigt_matrix] = convert_tensor_to_voigt_6x6(ET_tensor)
 endfunction
 ```
 
-## 6. Aufgabe 6: Glyphen-Visualisierung ($E_{nnnn}$)
+## 6. Aufgabe 6: Glyphen-Visualisierung ($E_{nn}$)
 Zur tiefgehenden Analyse der richtungsabhängigen Materialsteifigkeit wird der Richtungsmodul $E_{nnnn}$ berechnet. Dieser skalare Wert beschreibt den Widerstand des Materials gegen eine inkrementelle Streckung in einer beliebigen Raumrichtung $\boldsymbol{n}$.
 
 ### 6.1 Vektorisierte Richtungsmodul-Berechnung

@@ -353,8 +353,6 @@ endfunction
 Die Form der resultierenden 3D-Glyphe gibt sofort Auskunft über den physikalischen Materialzustand:
 *   **Kugel (Undeformiert, $\lambda=1$):** Das Material ist initial isotrop. In jede Richtung ist der Widerstand gegen Dehnung gleich groß. Der Radius der Kugel entspricht dem initialen Tangentenmodul.
 *   **Verzerrtes Ellipsoid (Deformiert, $\lambda > 1$):** Unter unaxialem Zug richten sich die Polymerketten in Zugrichtung aus (Dehnungsinduzierte Anisotropie). 
-    *   *Längsachse:* Der massiv anwachsende Radius visualisiert die entropische Versteifung in Zugrichtung (Locking-Effekt). Das Material wird hier regelrecht hart.
-    *   *Taille / Äquator:* In Querrichtung ist die Steifigkeit deutlich geringer, da hier die Kettenausrichtung fehlt und das Material quer zur Zugrichtung weich bleibt.
 
 ### 6.3 Scilab Grafik-Tools: Farbraum, Kamera und Perspektive
 Um die 3D-Glyphen publikationsreif und unverzerrt darzustellen, werden spezifische Post-Processing-Tools von Scilab verwendet:
@@ -362,6 +360,38 @@ Um die 3D-Glyphen publikationsreif und unverzerrt darzustellen, werden spezifisc
 *   **`gcf().color_map = jet(100)` & `colorbar`:** Definiert einen Farbverlauf von Blau (weich) nach Rot (steif) in 100 Abstufungen und blendet eine Farbskala zur quantitativen Ablesung ein.
 *   **`gca().isoview = "on"`:** Dies ist **essenziell**! Es verhindert, dass Scilab die Achsen automatisch unterschiedlich skaliert, was die physikalischen Proportionen der Glyphe (Kugel vs. Ellipse) visuell zerstören würde.
 *   **`gca().rotation_angles = my_view`:** Setzt den Kamerawinkel (Azimut und Polar) für beide Subplots exakt gleich, um einen unverfälschten Vorher-Nachher-Vergleich zu garantieren.
+
+```scilab
+analysis_data = calculate_stiffness_analysis_data(p_combined);
+[NX, NY, NZ, r_stiffness] = visualize_stiffness_glyph_3d(analysis_data.Voigt_C0);
+[NX, NY, NZ, r_stiffness2] = visualize_stiffness_glyph_3d(analysis_data.Voigt_c_max);
+
+scf(5); clf();
+    my_view = [70, 30]; 
+    lim = 2050; lim2 = 52000;
+    gcf().color_map = jet(100);
+    title(_("Visualisierung der Steifigkeitsevolution (1/2): 3D-Richtungsprojektion (Anfangs- vs. Enddehnung) " +..
+            "[my = " + my_c + ", beta = " + Beta_c + ", K = " + K + "]"), "font_size", 4); 
+    subplot(1,2,1); 
+        surf(r_stiffness.*NX, r_stiffness.*NY, r_stiffness.*NZ, r_stiffness, "FaceColor", "interp");
+        gca().isoview = "on"; gca().rotation_angles = my_view;
+        gca().data_bounds = [-lim, -lim, -lim; lim, lim, lim];
+        c = colorbar(min(r_stiffness), max(r_stiffness));
+        c.axes_bounds = [0.405, 0.25, 0.05, 0.4]
+        c.title.text = msprintf("%s\nMin: %.1f\nMax: %.1f", "$\Large \mathbb{C}_{nn}\ \large[MPa]$", ..
+                                min(r_stiffness), max(r_stiffness));
+        c.title.font_size = 2;
+    subplot(1,2,2); 
+        surf(r_stiffness2.*NX, r_stiffness2.*NY, r_stiffness2.*NZ, r_stiffness2, "FaceColor", "interp");
+        gca().isoview = "on"; gca().rotation_angles = my_view;
+        gca().data_bounds = [-lim2, -lim2, -lim2; lim2, lim2, lim2];
+        c = colorbar(min(r_stiffness2), max(r_stiffness2));
+        c.axes_bounds = [0.905, 0.25, 0.05, 0.4]
+        c.title.text = msprintf("%s\nMin: %.1f\nMax: %.1f", "$\Large \mathbb{C}_{nn}\ \large[MPa]$", ..
+                                min(r_stiffness2), max(r_stiffness2));
+        c.title.font_size = 2;
+gcf().figure_size = [1300, 690];
+```
 
 --------------------------------------------------------------------------------
 

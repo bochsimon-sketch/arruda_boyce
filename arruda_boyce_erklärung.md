@@ -196,7 +196,7 @@ Die grafische Aufbereitung der Simulationsergebnisse erfolgt über die integrier
 Die Funktion `subplot(m, n, p)` unterteilt die Grafikfläche in eine Matrix aus `m` Zeilen und `n` Spalten. Der Parameter `p` adressiert das jeweilige Teilfenster (z. B. `subplot(1, 2, 1)` für die linke und `subplot(1, 2, 2)` für die rechte Spalte). Dies ermöglicht den direkten visuellen Vergleich unterschiedlicher Lastfälle oder den Abgleich zwischen Modellvorhersage und experimentellen Daten in einer einzigen kompakten Abbildung.
 
 ### 3.3 Formatierung und LaTeX-Unterstützung
-Zur präzisen Beschriftung werden Funktionen wie `title`, `xlabel` und `ylabel` verwendet. Scilab unterstützt hierbei die native Einbindung von LaTeX-Strings (eingeschlossen in `$ ... $`), was die korrekte und professionelle Darstellung mathematischer Symbole wie $\varepsilon_{11}$ oder $\Pi_{11}$ ermöglicht (z. B. `" $\large \varepsilon_{11}\ \normalsize[\%]$ "`). Durch den Zugriff auf die globalen Fenster-Eigenschaften via `gcf().figure_size = ` wird die Ausgabegröße der Abbildungen in Pixeln exakt definiert, um eine konsistente Dokumentationsqualität für Berichte zu gewährleisten. Mit `xgrid(1,1,7)` wird zusätzlich ein Hilfsgitter zur besseren Lesbarkeit eingeblendet.
+Zur präzisen Beschriftung werden Funktionen wie `title`, `xlabel` und `ylabel` verwendet. Scilab unterstützt hierbei die native Einbindung von LaTeX-Strings (eingeschlossen in `$ ... $`), was die korrekte Darstellung mathematischer Symbole wie $\varepsilon_{11}$ oder $\Pi_{11}$ ermöglicht. Durch `gcf().figure_size` wird die Ausgabegröße der Abbildungen in Pixeln exakt definiert, um eine konsistente Dokumentationsqualität für Berichte zu gewährleisten.
 
 ```scilab
 // Code-Ausschnitt: Ploterstellung mit LaTeX-Beschriftung und Fenstersteuerung
@@ -327,22 +327,24 @@ Die Form der resultierenden 3D-Glyphe gibt sofort Auskunft über den physikalisc
     *   *Längsachse:* Der massiv anwachsende Radius visualisiert die entropische Versteifung in Zugrichtung (Locking-Effekt). Das Material wird hier regelrecht hart.
     *   *Taille / Äquator:* In Querrichtung ist die Steifigkeit deutlich geringer, da hier die Kettenausrichtung fehlt und das Material quer zur Zugrichtung weich bleibt.
 
-### 6.3 Skalierung und Farbraumsteuerung
-Die Visualisierung (`surf(X,Y,Z)`) nutzt eine dynamische Farbskala (Jet-Colormap), um die extremen Steifigkeitsgradienten sichtbar zu machen. Die Verwendung der Eigenschaft `gca().isoview = "on"` ist hierbei zwingend erforderlich, um die Achsen in Scilab einheitlich zu skalieren, da andernfalls die physikalisch korrekten Proportionen der Glyphen-Geometrie verzerrt würden.
+### 6.3 Scilab Grafik-Tools: Farbraum, Kamera und Perspektive
+Um die 3D-Glyphen publikationsreif und unverzerrt darzustellen, werden spezifische Post-Processing-Tools von Scilab verwendet:
+*   **`surf(X,Y,Z, color)`:** Zeichnet die 3D-Oberfläche. Durch die Übergabe der radialen Steifigkeit als 4. Parameter (`r_stiffness`) wird die Farbe an die lokale Steifigkeit gekoppelt.
+*   **`gcf().color_map = jet(100)` & `colorbar`:** Definiert einen Farbverlauf von Blau (weich) nach Rot (steif) in 100 Abstufungen und blendet eine Farbskala zur quantitativen Ablesung ein.
+*   **`gca().isoview = "on"`:** Dies ist **essenziell**! Es verhindert, dass Scilab die Achsen automatisch unterschiedlich skaliert, was die physikalischen Proportionen der Glyphe (Kugel vs. Ellipse) visuell zerstören würde.
+*   **`gca().rotation_angles = my_view`:** Setzt den Kamerawinkel (Azimut und Polar) für beide Subplots exakt gleich, um einen unverfälschten Vorher-Nachher-Vergleich zu garantieren.
 
 --------------------------------------------------------------------------------
 
 ## 7. Aufgabe 7: Transformation der Steifigkeitstensorik
-In der Kontinuumsmechanik muss streng zwischen der Referenzkonfiguration (materiell) und der Momentankonfiguration (räumlich) unterschieden werden. Die Transformation des materiellen Steifigkeitstensors in die aktuelle, deformierte Konfiguration ist für die Analyse der "wahren" Steifigkeit unter Last entscheidend.
+In der Kontinuumsmechanik muss streng zwischen der Referenzkonfiguration (materiell) und der Momentankonfiguration (räumlich) unterschieden werden.
 
 ### 7.1 Push-Forward via Voigt-Transformationsmatrix ($\mathbf{Q}$)
-Der räumliche Steifigkeitstensor $\mathbb{c}_T$ beschreibt die Steifigkeit im deformierten Labor-Koordinatensystem (Euler-Betrachtung). Er wird klassisch über die Push-Forward-Operation des materiellen Tensors $\mathbb{C}_T$ berechnet [--> vgl. Holzapfel, Gl. 6.159]:
+Der räumliche Steifigkeitstensor $\mathbb{c}_T$ beschreibt die Steifigkeit im deformierten Labor-Koordinatensystem. Er wird über die Push-Forward-Operation des materiellen Tensors $\mathbb{C}_T$ berechnet [--> vgl. Holzapfel, Gl. 6.159]:
 
 $$c_{ijkl} = \frac{1}{J} F_{iI} F_{jJ} F_{kK} F_{lL} \mathbb{C}_{IJKL}$$
 
-Um diese rechenintensive 4.-Stufe-Operation zu umgehen, nutzt der Code (`push_forward_stiffness_voigt`) eine $6 \times 6$ Voigt-Transformationsmatrix $\mathbf{Q}$. Diese bildet die Tensor-Transformation hocheffizient auf den Voigt-Raum ab:
-
-$$\mathbf{M}_{\text{räumlich}} = \frac{1}{J} \mathbf{Q} \cdot \mathbf{M}_{\text{materiell}} \cdot \mathbf{Q}^T$$
+Um diese rechenintensive 4.-Stufe-Operation in Schleifen zu umgehen, nutzt der Code eine $6 \times 6$ Voigt-Transformationsmatrix $\mathbf{Q}$. Diese bildet die Tensor-Transformation exakt auf den Voigt-Raum ab:
 
 ```scilab
 // Code-Ausschnitt: Hocheffizienter Push-Forward der Steifigkeit im Voigt-Raum
@@ -354,23 +356,10 @@ endfunction
 ```
 
 ### 7.2 Räumliche vs. Materielle Formulierung (Der 1D-Fall)
-Ein kritisches Detail hyperelastischer Zugversuche ist der Umgang mit der Querkontraktion und dem schrumpfenden Querschnitt, was sich direkt in den Tangentenmoduln niederschlägt:
-*   **Wahrer Modul ($E_{T,\text{true}}$):** Basierend auf der Cauchy-Spannung, steigt dieser oft monoton an, da sich die Polymerketten spannen.
-*   **Nominaler Modul ($E_{T,\text{nom}}$):** Basierend auf der 1. PK-Spannung, zeigt dieser anfangs oft eine abfallende Steigung (U-Kurve), da der Querschnitt extrem schrumpft.
-
-Der fundamentale 1D-Zusammenhang zwischen der wahren Hauptspannung $\sigma$ und der 1. PK-Hauptspannung $P$ bei Inkompressibilität ($J=1$) lautet [--> vgl. Holzapfel, Gl. 6.48]: 
-
-$$P = \frac{\sigma}{\lambda}$$
-
-Leitet man diese Nennspannung $P$ nach der Streckung $\lambda$ ab (Quotientenregel), erhält man den Nennmodul (technischen Modul):
-
-$$E_{T,\text{nom}} = \frac{\partial P}{\partial \lambda} = \frac{\partial}{\partial \lambda} \left( \frac{\sigma}{\lambda} \right) = \frac{\left( \lambda \frac{\partial \sigma}{\partial \lambda} \right) - \sigma}{\lambda^2}$$
-
-Mit dem wahren Tangentenmodul $E_{T,\text{true}} = \lambda \frac{\partial \sigma}{\partial \lambda}$ entspricht dies exakt der eleganten Transformation im Code:
-
-$$E_{T,\text{nom}} = \frac{E_{T,\text{true}} - \sigma}{\lambda^2}$$
-
-Der Term $-\sigma$ subtrahiert analytisch den exakten "geometrischen Erweichungseffekt" aufgrund der Querschnittsverjüngung und liefert so die korrekte Laborkurven-Steigung.
+Da das Materialmodell kompressibel angesetzt ist ($K < \infty$) und die tatsächliche Querkontraktion numerisch exakt über das transversale Kraftgleichgewicht bestimmt wird, verbietet sich eine vereinfachte analytische 1D-Auswertung der Steifigkeit (wie sie bei perfekter Inkompressibilität möglich wäre).
+Stattdessen extrahiert die Routine `calculate_uniaxial_stiffness_curves` die Steifigkeitsentwicklung direkt aus den physikalischen Tensorkomponenten:
+*   **Materielle Steifigkeit ($\mathbb{C}_{11}$):** Bezogen auf die Referenzkonfiguration. Zeigt das fundamentale Versteifen des Materialnetzwerks durch Kettenstreckung.
+*   **Räumliche Steifigkeit ($\mathbb{c}_{11}$):** Bezogen auf die Momentankonfiguration. Hier ist der "geometrische Erweichungseffekt" durch die schrumpfende Querschnittsfläche und die Volumenänderung ($1/J$) bereits vollständig und exakt einkondensiert.
 
 ```scilab
 // Code-Ausschnitt: Extraktion der Tensorkomponenten über den Dehnungspfad

@@ -401,7 +401,7 @@ In der Kontinuumsmechanik muss streng zwischen der Referenzkonfiguration (materi
 ### 7.1 Push-Forward via Voigt-Transformationsmatrix ($\mathbf{Q}$)
 Der räumliche Steifigkeitstensor $\mathbb{c}_T$ beschreibt die Steifigkeit im deformierten Labor-Koordinatensystem. Er wird über die Push-Forward-Operation des materiellen Tensors $\mathbb{C}_T$ berechnet [--> vgl. Holzapfel, Gl. 6.159]:
 
-$$c_{ijkl} = \frac{1}{J} F_{iI} F_{jJ} F_{kK} F_{lL} \mathbb{C}_{IJKL}$$
+$$c_{ijkl} = \frac{1}{J} F_{iI} F_{jJ} \mathbb{C}_{IJKL} F_{kK} F_{lL}$$
 
 Um diese rechenintensive 4.-Stufe-Operation in Schleifen zu umgehen, nutzt der Code eine $6 \times 6$ Voigt-Transformationsmatrix $\mathbf{Q}$. Diese bildet die Tensor-Transformation exakt auf den Voigt-Raum ab:
 
